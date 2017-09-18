@@ -1,14 +1,12 @@
 from sanic import Sanic
-from sanic.response import text, json,html
+from sanic.response import text, json,html,redirect
 import sanic.request
 from jinja2 import Environment, Template, FileSystemLoader, select_autoescape
-
-
-import aioodbc
+import sqlite3
 
 import os
 
-#setting up app and 
+#setting up app and stuff
 app  = Sanic()
 env = Environment(
 	loader=FileSystemLoader('views',	),
@@ -17,25 +15,14 @@ env = Environment(
 	#enable_async=True
 )
 templates = env.list_templates()
+conn = sqlite3.connect("data.db")
+curs = conn.cursor()
 
-print(templates)
-
-
-@app.listener('before_server_start')
-async def setup_db_connection(app,loop):
-	dsn = 'Driver=SQLite3;Database=data.db'
-	_conn = await aioodbc.connect(dsn=dsn, loop=loop)
-	_cursor = await _conn.cursor()
-	app.
-	print("aylmao")
-	print(_cursor)
-
-#@app.middleware('before_server_stop')
 
 
 @app.route("/")
 def root (request):
-	print(_conn)
+	print(conn)
 	template = env.get_template("index.tpl")
 	rendered_templ = template.render(variable = "aylmao",seq = range(0,20))
 	return html(rendered_templ)
@@ -45,6 +32,13 @@ def page(req,pageID):
 	#template = Template()
 	return text("reqeust for "+str(pageID)+ " came in")
 
+@app.route("/easy/")
+def easy(req):
+	return req.redirect("/easy/1")
+
+@app.route("/easy/<pageID>"):
+def filtereasy(req,):
+	return text("TODO")
 
 
 if __name__ == '__main__':
