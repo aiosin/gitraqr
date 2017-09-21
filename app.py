@@ -3,7 +3,7 @@ from sanic.response import text, json,html,redirect
 import sanic.request
 from jinja2 import Environment, Template, FileSystemLoader, select_autoescape
 import sqlite3
-
+from util import fetchtitle
 import os
 
 #setting up app and stuff
@@ -18,6 +18,9 @@ templates = env.list_templates()
 conn = sqlite3.connect("data.db")
 curs = conn.cursor()
 
+print(fetchtitle(curs, "dudes"))
+
+
 
 
 @app.route("/")
@@ -29,17 +32,19 @@ def root (request):
 
 @app.route("/page/<pageID>")
 def page(req,pageID):
-	#template = Template()
 	return text("reqeust for "+str(pageID)+ " came in")
 
 @app.route("/easy/")
 def easy(req):
 	return req.redirect("/easy/1")
 
-@app.route("/easy/<pageID>"):
-def filtereasy(req,):
+@app.route("/easy/<pageID>")
+def filtereasy(req):
 	return text("TODO")
 
+@app.route("/medium/<pageID>")
+def medium(req):
+	return text("TODO")
 
 if __name__ == '__main__':
 	app.static("/static", "./static")
