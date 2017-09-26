@@ -23,7 +23,7 @@ def root (request):
 	data = fetch_issues(curs)
 	respdata = [i for i in data]
 	template = env.get_template("index.tpl")
-	rendered_templ = template.render(variable = "aylmao",seq = range(0,20))
+	rendered_templ = template.render(variable = "aylmao",seq = respdata)
 	#return req.redirect("/page/1")
 	return html(rendered_templ)
 

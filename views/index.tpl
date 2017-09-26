@@ -9,7 +9,12 @@
         {{variable}}
         <ul>
             {% for item in seq %}
-                <li>{{ item }}</li>
+                <li>
+                    <h2>{{item[2]}} {{ item[0] }}</h2>
+                    <p> {{item [3]}} time ago </p> 
+                    <p> {{item[1]}}</p> 
+                </li>
+                
             {% endfor %}
         </ul>
     </main>
