@@ -19,3 +19,14 @@ main{
     margin-left: 15px;
     
 }
+.issuedescr{
+    width: 1000px;
+}
+.issueage{
+    padding-left: 10px;
+    margin-top: 5px;
+
+}
+.issuetitle{
+    margin-bottom: 5px;
+}
