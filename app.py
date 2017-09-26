@@ -3,29 +3,22 @@ from sanic.response import text, json,html,redirect
 import sanic.request
 from jinja2 import Environment, Template, FileSystemLoader, select_autoescape
 import sqlite3
-from util import fetchtitle
 import os
 
-#setting up app and stuff
+# initializaton n stuff
 app  = Sanic()
 env = Environment(
 	loader=FileSystemLoader('views',	),
 	autoescape=select_autoescape(['html', 'xml']),
-	#need python3.6 for this
+	#python 3.6 required for jinja 2 enable_async:
 	#enable_async=True
 )
 templates = env.list_templates()
 conn = sqlite3.connect("data.db")
 curs = conn.cursor()
 
-print(fetchtitle(curs, "dudes"))
-
-
-
-
 @app.route("/")
 def root (request):
-	print(conn)
 	template = env.get_template("index.tpl")
 	rendered_templ = template.render(variable = "aylmao",seq = range(0,20))
 	return html(rendered_templ)
@@ -39,12 +32,25 @@ def easy(req):
 	return req.redirect("/easy/1")
 
 @app.route("/easy/<pageID>")
-def filtereasy(req):
+def routeeasy(req):
 	return text("TODO")
 
 @app.route("/medium/<pageID>")
 def medium(req):
 	return text("TODO")
+
+@app.route("/medium")
+def routemedium(req):
+	return req.redirect("/medium/1")
+
+@app.route("/hard/<pageID>")
+def hard(req):
+	return text("TODO")
+
+@app.route("/hard")
+def routehard(req):
+	return req.redirect("/hard/1")
+
 
 if __name__ == '__main__':
 	app.static("/static", "./static")
