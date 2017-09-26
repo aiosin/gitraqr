@@ -4,7 +4,7 @@ import sanic.request
 from jinja2 import Environment, Template, FileSystemLoader, select_autoescape
 import sqlite3
 import os
-
+from util import fetch_issues, fetch_issues_by_type
 # initializaton n stuff
 app  = Sanic()
 env = Environment(
@@ -17,10 +17,14 @@ templates = env.list_templates()
 conn = sqlite3.connect("data.db")
 curs = conn.cursor()
 
+#TODO return to page/1
 @app.route("/")
 def root (request):
+	data = fetch_issues(curs)
+	respdata = [i for i in data]
 	template = env.get_template("index.tpl")
 	rendered_templ = template.render(variable = "aylmao",seq = range(0,20))
+	#return req.redirect("/page/1")
 	return html(rendered_templ)
 
 @app.route("/page/<pageID>")
