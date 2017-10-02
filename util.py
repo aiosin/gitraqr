@@ -1,5 +1,6 @@
 import sqlite3
 import requests as re 
+import json
 
 #file: util.py
 #helper funcitons for app.py
@@ -25,18 +26,24 @@ def get_issues():
 	api = "https://api.github.com/search/issues?q=label:easy+&sort=created&order=desc"
 	otherAPI="https://api.github.com/search/issues?q=label:easy+&sort=created&order=desc&page=2&per_page=10"
 
+def fetch_n_random(curs,count=10):
+	#TODO: implement random values from sqlite db
+	pass
+
 #main method for internal testing purposes only
 def main():
 	conn = sqlite3.connect("data.db")
 	curs = conn.cursor()
-	#curs.execute("INSERT INTO MALENIKI VALUES (?,?,?,?)", ("aylmao", "AYLMAO DESCR", "easy", 123123))
-	conn.commit()
-	a = fetch_issues_by_type(curs, "easy")
-	for i in a:
-		print(i)
-	a = fetch_issues(curs,pagecount = 5)
-	for i in a:
-		print(i)
+	#curs.execute("INSERT INTO MALENIKI VALUES (?,?,?,?, ?)", ("aylmao", "AYLMAO DESCR", "easy", 123123, "http://example.com"))
+	#conn.commit()
+	with open("github-data.json", "r") as f:
+		rawstring = f.read()
+		jsonobject = json.loads(rawstring)
+		print(jsonobject)
+		print("\n\n\n\n\n")
+		print(json.dumps(jsonobject.get("items"),sort_keys=True, indent=4))
+		print(len(jsonobject.get("items")))
+
 	
 if __name__ == '__main__':
 	main()
