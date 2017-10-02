@@ -21,7 +21,7 @@ def get_issues():
 	api = "https://api.github.com/search/issues?q=label:easy+&sort=created&order=desc"
 	otherAPI="https://api.github.com/search/issues?q=label:easy+&sort=created&order=desc&page=2&per_page=10"
 
-
+#main method for internal testing purposes only
 def main():
 	conn = sqlite3.connect("data.db")
 	curs = conn.cursor()

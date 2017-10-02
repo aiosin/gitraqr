@@ -21,10 +21,9 @@ curs = conn.cursor()
 @app.route("/")
 def root (request):
 	data = fetch_issues(curs)
-	#TODO: l25 test
 	respdata = data.fetchall()
 	template = env.get_template("index.tpl")
-	rendered_templ = template.render(variable = "aylmao",seq = respdata)
+	rendered_templ = template.render(loopdata = respdata)
 	#return req.redirect("/page/1")
 	return html(rendered_templ)
 

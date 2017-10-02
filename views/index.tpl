@@ -6,9 +6,8 @@
         <h1 id="overscript">gitraqr</h1>
     </header>
     <main>
-        {{variable}}
         <ul>
-            {% for item in seq %}
+            {% for item in loopdata %}
                 <li>
                     <h2 class="issuetitle" >{{item[2]}} {{ item[0] }}</h2>
                     <p class="issueage" > {{item [3]}} time ago </p> 
