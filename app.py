@@ -17,19 +17,23 @@ templates = env.list_templates()
 conn = sqlite3.connect("data.db")
 curs = conn.cursor()
 
+#file: app.py
+#implements main logic for the service
+#TODO: finish todos below (~30 min)
+
 #TODO return to page/1
 @app.route("/")
 def root (request):
+	return redirect("/page/1")
+
+
+@app.route("/page/<pageID>")
+def page(req,pageID):
 	data = fetch_issues(curs)
 	respdata = data.fetchall()
 	template = env.get_template("index.tpl")
 	rendered_templ = template.render(loopdata = respdata)
-	#return req.redirect("/page/1")
 	return html(rendered_templ)
-
-@app.route("/page/<pageID>")
-def page(req,pageID):
-	return text("reqeust for "+str(pageID)+ " came in")
 
 @app.route("/easy/")
 def easy(req):
@@ -37,11 +41,19 @@ def easy(req):
 
 @app.route("/easy/<pageID>")
 def routeeasy(req):
-	return text("TODO")
+	data = fetch_issues_by_type(curs,"easy")
+	respdata = data.fetchall()
+	template = env.get_template("index.tpl")
+	rendered_templ = template.render(loopdata = respdata)
+	return html(rendered_templ)
 
 @app.route("/medium/<pageID>")
 def medium(req):
-	return text("TODO")
+	data = fetch_issues_by_type(curs,"medium")
+	respdata = data.fetchall()
+	template = env.get_template("index.tpl")
+	rendered_templ = template.render(loopdata = respdata)
+	return html(rendered_templ)
 
 @app.route("/medium")
 def routemedium(req):
@@ -49,7 +61,11 @@ def routemedium(req):
 
 @app.route("/hard/<pageID>")
 def hard(req):
-	return text("TODO")
+	data = fetch_issues_by_type(curs,"hard")
+	respdata = data.fetchall()
+	template = env.get_template("index.tpl")
+	rendered_templ = template.render(loopdata = respdata)
+	return html(rendered_templ)
 
 @app.route("/hard")
 def routehard(req):

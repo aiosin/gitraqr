@@ -1,17 +1,21 @@
 import sqlite3
 import requests as re 
 
+#file: util.py
+#helper funcitons for app.py
+#TODO: implement page browsing functionality
+#
 
 #get top row from sqlite
 #SELECT * FROM SAMPLE_TABLE ORDER BY ROWID ASC LIMIT 1
-def fetch_issues_by_type(curs,mode, count=10):
+def fetch_issues_by_type(curs,mode, page=1, pagecount=10):
 	#curs.execute("SELECT * FROM maleniki WHERE IDIFFCTY LIKE '"+str(mode)+"' ORDER BY ITIME ASC LIMIT "+str(count))
-	return curs.execute("SELECT * FROM MALENIKI WHERE DIFFICULTY LIKE '"+str(mode)+"' ORDER BY TIMECR ASC LIMIT "+str(count) )
+	return curs.execute("SELECT * FROM MALENIKI WHERE DIFFICULTY LIKE '"+str(mode)+"' ORDER BY TIMECR ASC LIMIT "+str(pagecount) )
 #fetch_issues
-#args: sqlite curs object, (optional int: count)
+#args: sqlite curs object, (optional int: pagecount, int: page)
 #returns a cursor with the newerst n issues, n is 10 by default unless set otherwise
-def fetch_issues(curs, count=10):
-	return curs.execute("SELECT * FROM MALENIKI ORDER BY TIMECR ASC LIMIT "+str(count))
+def fetch_issues(curs,page=1, pagecount=10):
+	return curs.execute("SELECT * FROM MALENIKI ORDER BY TIMECR ASC LIMIT "+str(pagecount))
 
 #get_issues
 #returns the oldest/newest issues from github search api
@@ -30,7 +34,7 @@ def main():
 	a = fetch_issues_by_type(curs, "easy")
 	for i in a:
 		print(i)
-	a = fetch_issues(curs,count = 5)
+	a = fetch_issues(curs,pagecount = 5)
 	for i in a:
 		print(i)
 	

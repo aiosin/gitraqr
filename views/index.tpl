@@ -12,6 +12,7 @@
                     <h2 class="issuetitle" >{{item[2]}} {{ item[0] }}</h2>
                     <p class="issueage" > {{item [3]}} time ago </p> 
                     <p class="issuedescr"> {{item[1]}}</p> 
+                    <a href="{{item[4]}}"> Link to issue </a>
                 </li>
                 
             {% endfor %}
