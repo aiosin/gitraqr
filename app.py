@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import ssl
 
 import sanic.request
 from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
@@ -7,6 +8,10 @@ from sanic import Sanic
 from sanic.response import html, json, redirect, text
 
 from util import *
+
+context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH)
+context.load_cert_chain("/etc/letsencrypt/live/gitraqr.online/fullchain.pem", keyfile="/etc/letsencrypt/live/gitraqr.online/privkey.pem")
+
 
 app  = Sanic(__name__)
 env = Environment(
@@ -98,5 +103,4 @@ async def route_random(req):
 
 if __name__ == '__main__':
 	app.static("/static", "./static")
-	app.run("0.0.0.0",8080,debug=True)
-
+	app.run("0.0.0.0",443,debug=False,ssl=context)

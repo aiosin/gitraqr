@@ -36,7 +36,7 @@ async def periodtask(curs,conn):
 					val = item['title'],item['body'],element,item['id'],item['html_url']
 					try:
 						curs.execute('INSERT INTO `maleniki`(`TITLE`,`DESCR`,`DIFFICULTY`,`ID`,`URL`) VALUES (?,?,?,?,?);',val)
-					except sqlite3.IntegrityError as e:
+					except sqlite3.IntegrityError:
 						print('Already got value',item['title'],item['id'])
 		conn.commit()
 				
