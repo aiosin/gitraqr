@@ -13,7 +13,7 @@
         <ul>
             {% for item in loopdata %}
                 <div class='tagcolor{{item[2]}}'>
-                   <h2 class="issuetag" >{{item[2]}} </h2>
+                <h2 class="issuetag" >{{item[2]}} </h2>
                 </div> 
                 <div class='isscontent'>
                     <li>
@@ -25,8 +25,8 @@
             {% endfor %}
         </ul>
         <div class='isscontent'> 
-            <a id='aprev' href="/page/{{page-1}}"> Previous </a>
-            <a id='anext' href="/page/{{page+1}}"> Next </a>
+            <a id='aprev' href="/hard/{{page-1}}"> Previous </a>
+            <a id='anext' href="/hard/{{page+1}}"> Next </a>
             <br>
             <a id='aupdate' href="/update/"> update issue status </a>
         </div> 

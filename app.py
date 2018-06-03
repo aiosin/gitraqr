@@ -6,69 +6,94 @@ from jinja2 import Environment, FileSystemLoader, Template, select_autoescape
 from sanic import Sanic
 from sanic.response import html, json, redirect, text
 
-from util import fetch_issues, fetch_issues_by_type
+from util import *
 
-app  = Sanic()
+app  = Sanic(__name__)
 env = Environment(
 	loader=FileSystemLoader('views',	),
 	autoescape=select_autoescape(['html', 'xml']),
-	enable_async=True
+	#enable_async=True #lol this breaks lots of shit
 )
-
-
 templates = env.list_templates()
 conn = sqlite3.connect("data.db")
 curs = conn.cursor()
 
+app.add_task(periodtask(curs,conn))
+
+
 @app.route("/")
-def root (request):
+async def root (request):
 	return redirect("/page/1")
 
 
 @app.route("/page/<pageID>")
-def page(req,pageID):
-	data = fetch_issues(curs)
+async def page(req,pageID):
+	pageID = int(pageID)
+	if pageID < 1:
+		return redirect("/page/1")
+	data = fetch_issues(curs,page=pageID)
 	respdata = data.fetchall()
-	print(respdata)
 	template = env.get_template("index.tpl")
-	rendered_templ = template.render(loopdata = respdata)
+	rendered_templ = template.render(loopdata = respdata,page=pageID)
 	return html(rendered_templ)
 
 @app.route("/easy/")
-def easy(req):
-	return req.redirect("/easy/1")
+async def easy(req):
+	return redirect("/easy/1")
 
 @app.route("/easy/<pageID>")
-def routeeasy(req):
-	data = fetch_issues_by_type(curs,"easy")
+async def routeeasy(req,pageID):
+	pageID = int(pageID)
+	if pageID < 1:
+		return redirect("/page/1")
+	data = fetch_issues_by_type(curs,"easy",page=pageID)
 	respdata = data.fetchall()
-	template = env.get_template("index.tpl")
-	rendered_templ = template.render(loopdata = respdata)
+	template = env.get_template("easy.tpl")
+	rendered_templ = template.render(loopdata = respdata,page=pageID)
 	return html(rendered_templ)
 
 @app.route("/medium/<pageID>")
-def medium(req):
-	data = fetch_issues_by_type(curs,"medium")
+async def medium(req,pageID):
+	pageID = int(pageID)
+	if pageID < 1:
+		return redirect("/page/1")
+	data = fetch_issues_by_type(curs,"medium",page=pageID)
 	respdata = data.fetchall()
-	template = env.get_template("index.tpl")
-	rendered_templ = template.render(loopdata = respdata)
+	template = env.get_template("medium.tpl")
+	rendered_templ = template.render(loopdata = respdata,page=pageID)
 	return html(rendered_templ)
 
 @app.route("/medium")
-def routemedium(req):
-	return req.redirect("/medium/1")
+async def routemedium(req):
+	return redirect("/medium/1")
 
 @app.route("/hard/<pageID>")
-def hard(req):
-	data = fetch_issues_by_type(curs,"hard")
+async def hard(req,pageID):
+	pageID = int(pageID)
+	if pageID < 1:
+		return redirect("/page/1")
+	data = fetch_issues_by_type(curs,"hard",page=pageID)
 	respdata = data.fetchall()
-	template = env.get_template("index.tpl")
-	rendered_templ = template.render(loopdata = respdata)
+	template = env.get_template("hard.tpl")
+	rendered_templ = template.render(loopdata = respdata,page=pageID)
 	return html(rendered_templ)
 
 @app.route("/hard")
-def routehard(req):
-	return req.redirect("/hard/1")
+async def routehard(req):
+	return redirect("/hard/1")
+
+
+@app.route("/update")
+async def updateval(req):
+	return html("<body> nutting yet bois</body>")
+
+@app.route("/random")
+async def route_random(req):
+	data = fetch_random(curs,10)
+	respdata = data.fetchall()
+	template = env.get_template("random.tpl")
+	rendered_templ = template.render(loopdata = respdata)
+	return html(rendered_templ)
 
 
 if __name__ == '__main__':
